@@ -6,15 +6,19 @@
 #define RC_CAR_MODE 0
 #define AVOID_CAR_MODE 1
 #define BUMP A4
+
 Servo myservo;
+
 const int MOTOR_1 = 1;
 const int MOTOR_2 = 2;
 const int MOTOR_3 = 3;
 const int MOTOR_4 = 4;
+
 AF_DCMotor MOTOR1(MOTOR_1, MOTOR12_64KHZ);
 AF_DCMotor MOTOR2(MOTOR_2, MOTOR12_64KHZ);
 AF_DCMotor MOTOR3(MOTOR_3, MOTOR12_64KHZ);
 AF_DCMotor MOTOR4(MOTOR_4, MOTOR12_64KHZ);
+
 int greenPin = A3;
 int redPin = A2;
 int bluePin = A1;
@@ -23,8 +27,10 @@ long distance;
 int val = 0;
 int set = 25;
 int mode = RC_CAR_MODE;
+
 SoftwareSerial BTSerial(2, 3);
 #define ActionTime 3000
+
 void setup()
 {
  Serial.begin(9600);
@@ -39,6 +45,7 @@ void setup()
  MOTOR4.setSpeed(255);
  BTSerial.begin(9600);
 }
+
 void crash()
 {
  val = digitalRead(BUMP);
@@ -55,12 +62,14 @@ void crash()
  setColor(0, 0, 0);
  }
 }
+
 void setColor(int red, int green, int blue)
 {
  analogWrite(redPin, red);
  analogWrite(greenPin, green);
  analogWrite(bluePin, blue);
 }
+
 long data()
 {
  digitalWrite(trigpin, LOW);
@@ -70,6 +79,7 @@ long data()
  distance = pulseIn(echopin, HIGH);
  return distance / 29 / 2;
 }
+
 void compareDistance()
 {
  if (distance_L > distance_R)
@@ -102,6 +112,7 @@ void compareDistance()
  delay(500);
  }
 }
+
 void hc_sr4()
 {
  MOTOR1.run(RELEASE);
@@ -120,6 +131,7 @@ void hc_sr4()
  delay(300);
  compareDistance();
 }
+
 void Stop_Release()
 {
  MOTOR1.run(RELEASE);
@@ -129,6 +141,7 @@ void Stop_Release()
  setColor(255, 0, 0);
  delay(20);
 }
+
 void Go_Forward()
 {
  MOTOR1.run(FORWARD);
@@ -138,6 +151,7 @@ void Go_Forward()
  setColor(0, 255, 0);
  delay(20);
 }
+
 void Go_Backward()
 {
  MOTOR1.run(BACKWARD);
@@ -148,6 +162,7 @@ void Go_Backward()
  setColor(255, 255, 0);
  delay(20);
 }
+
 void Go_Left()
 {
  MOTOR1.run(BACKWARD);
@@ -157,6 +172,7 @@ void Go_Left()
  setColor(0, 255, 255);
  delay(20);
 }
+
 void Go_Right()
 {
  MOTOR1.run(FORWARD);
@@ -166,6 +182,7 @@ void Go_Right()
  setColor(0, 255, 255);
  delay(20);
 }
+
 void RC_CAR()
 {
  if (BTSerial.available())
@@ -197,6 +214,7 @@ void RC_CAR()
  }
  }
 }
+
 void AVOID_CAR()
 {
  distance_F = data();
@@ -220,6 +238,7 @@ void AVOID_CAR()
  }
  }
 }
+
 void loop()
 {
  if (mode == RC_CAR_MODE)
